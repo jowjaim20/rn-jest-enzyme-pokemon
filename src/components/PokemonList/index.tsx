@@ -1,59 +1,52 @@
-import { NativeStackScreenProps } from "@react-navigation/native-stack"
-import { Component, ReactNode } from "react"
-import {
-  View,
-  StyleSheet,
-  Dimensions,
-  FlatList,
-  Text,
-  Pressable,
-} from "react-native"
-import { Pages } from "../../../App"
-import PokemonCard from "../PokemonCard"
-import Search from "../Search"
+import { Component } from "react";
+import { View, FlatList, Text } from "react-native";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { Pages } from "../../../App";
+import PokemonCard from "../PokemonCard";
+import Search from "../Search";
 
-export type PokemonListScreen = NativeStackScreenProps<Pages, "ListScreen">
+export type PokemonListScreen = NativeStackScreenProps<Pages, "ListScreen">;
 
 export type State = {
-  data: Data
-  all: Data
-}
+  data: Data;
+  all: Data;
+};
 
 export interface PokemonListProps extends PokemonListScreen {}
 
 export default class PokemonList extends Component<PokemonListProps, State> {
   constructor(props: PokemonListProps) {
-    super(props)
+    super(props);
     this.state = {
       all: { count: 0, next: null, previous: null, results: [] },
       data: { count: 0, next: null, previous: null, results: [] },
-    }
+    };
   }
 
   getData = async () => {
     const res = await fetch(
       "https://pokeapi.co/api/v2/pokemon?limit=50&offset=0",
-    )
+    );
 
-    const data = await res.json()
-    this.setState({ data })
-  }
+    const data = await res.json();
+    this.setState({ data });
+  };
 
   getAllPokemons = async () => {
-    const res = await fetch("https://pokeapi.co/api/v2/pokemon/?limit=10000")
+    const res = await fetch("https://pokeapi.co/api/v2/pokemon/?limit=10000");
 
-    const data = await res.json()
-    this.setState({ all: data })
-  }
+    const data = await res.json();
+    this.setState({ all: data });
+  };
 
   getNextData = async () => {
-    const { data: data1 } = this.state
+    const { data: data1 } = this.state;
 
-    if (!data1.next) return
+    if (!data1.next) return;
 
-    const res = await fetch(data1.next)
+    const res = await fetch(data1.next);
 
-    const data = await res.json()
+    const data = await res.json();
 
     if (data) {
       this.setState({
@@ -63,18 +56,18 @@ export default class PokemonList extends Component<PokemonListProps, State> {
           previous: data.previous,
           results: [...this.state?.data.results, ...data.results],
         },
-      })
+      });
     }
-  }
+  };
 
   componentDidMount() {
-    this.getData()
-    this.getAllPokemons()
+    this.getData();
+    this.getAllPokemons();
   }
 
   render() {
-    if (!this.state?.data || !this.state?.all) return null
-    const { all, data } = this.state
+    if (!this.state?.data || !this.state?.all) return null;
+    const { all, data } = this.state;
     return (
       <View>
         <Search {...this.props} all={all} />
@@ -87,6 +80,6 @@ export default class PokemonList extends Component<PokemonListProps, State> {
           onEndReached={this.getNextData}
         />
       </View>
-    )
+    );
   }
 }

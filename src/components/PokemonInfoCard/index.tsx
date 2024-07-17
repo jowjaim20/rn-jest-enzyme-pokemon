@@ -1,13 +1,13 @@
-import { Component } from "react"
-import { View, Text, Image } from "react-native"
+import { Component } from "react";
+import { View, Text, Image } from "react-native";
 
 export default class PokemonInfoCard extends Component<PokemonInfo> {
   constructor(props: PokemonInfo) {
-    super(props)
+    super(props);
   }
 
   render() {
-    const { name, height, sprites } = this.props
+    const { name, height, sprites } = this.props;
     return (
       <View>
         <Text testID="pokemon-name">{name}</Text>
@@ -18,6 +18,6 @@ export default class PokemonInfoCard extends Component<PokemonInfo> {
           source={{ uri: sprites.front_default }}
         />
       </View>
-    )
+    );
   }
 }

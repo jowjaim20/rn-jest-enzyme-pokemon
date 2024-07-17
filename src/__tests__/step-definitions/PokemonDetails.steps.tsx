@@ -1,21 +1,15 @@
-import { shallow, ShallowWrapper } from "enzyme"
-import { defineFeature, loadFeature } from "jest-cucumber"
-import { Pressable, Text } from "react-native"
+import { Text } from "react-native";
+import { shallow, ShallowWrapper } from "enzyme";
+import { defineFeature, loadFeature } from "jest-cucumber";
 import PokemonDetails, {
   DetailsState,
   PokemonDetailsScreen,
-} from "../../components/PokemonDetails"
-import { mockFetch } from "../../utils"
-import { pokemonMock } from "../../mocks"
-import PokemonInfoCard from "../../components/PokemonInfoCard"
+} from "../../components/PokemonDetails";
+import { mockFetch } from "../../utils";
+import { pokemonMock } from "../../mocks";
+import PokemonInfoCard from "../../components/PokemonInfoCard";
 
-const feature = loadFeature("./src/__tests__/features/PokemonDetails.feature")
-
-const nextTick = async () => {
-  return new Promise((resolve) => {
-    setTimeout(resolve, 0)
-  })
-}
+const feature = loadFeature("./src/__tests__/features/PokemonDetails.feature");
 
 defineFeature(feature, (test) => {
   const props: PokemonDetailsScreen = {
@@ -27,39 +21,47 @@ defineFeature(feature, (test) => {
         url: "test-url",
       },
     },
-  } as unknown as PokemonDetailsScreen
+  } as unknown as PokemonDetailsScreen;
 
   beforeEach(() => {
-    jest.resetModules()
-  })
+    jest.resetModules();
+  });
 
-  test("Render Pokemon Details", ({ given, then, when }) => {
+  test("Scenario #1", ({ given }) => {
+    given(
+      "It renders without crashing and a loading screen will appear",
+      () => {
+        window.fetch = mockFetch(pokemonMock);
+
+        const wrapper: ShallowWrapper<{}, DetailsState> = shallow(
+          <PokemonDetails {...props} />,
+        );
+
+        expect(wrapper.exists()).toBe(true);
+
+        const loading = wrapper.find(Text);
+        const text = loading.text();
+
+        expect(text).toBe("Loading...");
+      },
+    );
+  });
+
+  test("Scenario #2", ({ given, then }) => {
+    window.fetch = mockFetch(pokemonMock);
+
+    const wrapper: ShallowWrapper<{}, DetailsState> = shallow(
+      <PokemonDetails {...props} />,
+    );
+
     given("It renders without crashing", () => {
-      let wrapper: ShallowWrapper<{}, DetailsState>
-      window.fetch = mockFetch(pokemonMock)
-      wrapper = shallow(<PokemonDetails {...props} />)
+      expect(wrapper.exists()).toBe(true);
+    });
 
-      expect(wrapper.exists()).toBe(true)
-    })
+    then("after fetching it will render a new Pokemon", async () => {
+      const pokemonInfoCard = wrapper.find(PokemonInfoCard);
 
-    then("It will render a loading screen", () => {
-      let wrapper: ShallowWrapper<{}, DetailsState>
-      window.fetch = mockFetch(pokemonMock)
-      wrapper = shallow(<PokemonDetails {...props} />)
-      const loading = wrapper.find(Text)
-      const text = loading.text()
-
-      expect(text).toBe("Loading...")
-    })
-
-    then("after fetching it will render that new pokemon", async () => {
-      window.fetch = mockFetch(pokemonMock)
-
-      const wrapper = shallow(<PokemonDetails {...props} />)
-      await nextTick()
-      wrapper.update()
-      const pokemonInfoCard = wrapper.find(PokemonInfoCard)
-      expect(pokemonInfoCard.exists()).toBe(true)
-    })
-  })
-})
+      expect(pokemonInfoCard.exists()).toBe(true);
+    });
+  });
+});

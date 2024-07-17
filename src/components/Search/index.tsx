@@ -1,32 +1,31 @@
-import { NativeStackScreenProps } from "@react-navigation/native-stack"
-import { Component, ReactNode } from "react"
-import { FlatList, Pressable, Text, TextInput, View } from "react-native"
-import { PokemonListScreen } from "../PokemonList"
-import PokemonCard from "../PokemonCard"
+import { Component } from "react";
+import { FlatList, TextInput, View } from "react-native";
+import { PokemonListScreen } from "../PokemonList";
+import PokemonCard from "../PokemonCard";
 
 export interface SearchProps extends PokemonListScreen {
-  all: Data
+  all: Data;
 }
 
-type State = { pokemonName: string; searchedPokemons: Data["results"] }
+type State = { pokemonName: string; searchedPokemons: Data["results"] };
 
 export default class Search extends Component<SearchProps, State> {
   constructor(props: SearchProps) {
-    super(props)
-    this.state = { pokemonName: "", searchedPokemons: [] }
+    super(props);
+    this.state = { pokemonName: "", searchedPokemons: [] };
   }
 
   onChangeText = (text: string) => {
-    const { all } = this.props
+    const { all } = this.props;
     const filtered = all.results.filter((pokemon) =>
       pokemon.name.includes(text),
-    )
+    );
 
-    this.setState({ pokemonName: text, searchedPokemons: filtered })
-  }
+    this.setState({ pokemonName: text, searchedPokemons: filtered });
+  };
 
   render() {
-    const { searchedPokemons, pokemonName } = this.state
+    const { searchedPokemons, pokemonName } = this.state;
 
     return (
       <View>
@@ -38,6 +37,6 @@ export default class Search extends Component<SearchProps, State> {
           />
         </View>
       </View>
-    )
+    );
   }
 }

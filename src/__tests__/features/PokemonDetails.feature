@@ -1,6 +1,8 @@
 Feature: Testing PokemonDetails Component
 
-Scenario: Render Pokemon Details
+Scenario: Scenario #1
+    Given It renders without crashing and a loading screen will appear
+
+Scenario: Scenario #2
     Given It renders without crashing
-    Then It will render a loading screen
-    Then after fetching it will render that new pokemon
+    Then after fetching it will render a new Pokemon
