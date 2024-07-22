@@ -71,7 +71,6 @@ export default class PokemonList extends Component<PokemonListProps, State> {
     return (
       <View>
         <Search {...this.props} all={all} />
-        <Text>{data.count}</Text>
         <FlatList
           data={data.results}
           renderItem={({ item }) => (

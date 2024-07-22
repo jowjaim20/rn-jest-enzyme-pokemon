@@ -28,14 +28,30 @@ export default class Search extends Component<SearchProps, State> {
     const { searchedPokemons, pokemonName } = this.state;
 
     return (
-      <View>
+      <View style={{ position: "relative", zIndex: 999 }}>
         <TextInput value={pokemonName} onChangeText={this.onChangeText} />
-        <View>
-          <FlatList
-            data={searchedPokemons}
-            renderItem={({ item }) => <PokemonCard {...this.props} {...item} />}
-          />
-        </View>
+        {pokemonName !== "" ? (
+          <View
+            style={{
+              position: "absolute",
+              backgroundColor: "#fff",
+              zIndex: 999,
+              left: 0,
+              top: 20,
+              padding: 10,
+              width: 200,
+              borderRadius: 8,
+              marginLeft: 4,
+            }}>
+            <FlatList
+              contentContainerStyle={{ justifyContent: "center" }}
+              data={searchedPokemons}
+              renderItem={({ item }) => (
+                <PokemonCard {...this.props} {...item} />
+              )}
+            />
+          </View>
+        ) : null}
       </View>
     );
   }
