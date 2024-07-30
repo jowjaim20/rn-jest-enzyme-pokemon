@@ -11,6 +11,12 @@ import PokemonInfoCard from "../../components/PokemonInfoCard";
 
 const feature = loadFeature("./src/__tests__/features/PokemonDetails.feature");
 
+const nextTick = async () => {
+  return new Promise((resolve) => {
+    setTimeout(resolve, 0);
+  });
+};
+
 defineFeature(feature, (test) => {
   const props: PokemonDetailsScreen = {
     navigation: {
@@ -27,38 +33,39 @@ defineFeature(feature, (test) => {
     jest.resetModules();
   });
 
-  test("Scenario #1", ({ given }) => {
-    given(
-      "It renders without crashing and a loading screen will appear",
-      () => {
-        window.fetch = mockFetch(pokemonMock);
+  test("Scenario #1", ({ given, then }) => {
+    let wrapper: ShallowWrapper<{}, DetailsState>;
 
-        const wrapper: ShallowWrapper<{}, DetailsState> = shallow(
-          <PokemonDetails {...props} />,
-        );
+    given("It renders without crashing", () => {
+      window.fetch = mockFetch(pokemonMock);
 
-        expect(wrapper.exists()).toBe(true);
+      wrapper = shallow(<PokemonDetails {...props} />);
 
-        const loading = wrapper.find(Text);
-        const text = loading.text();
+      expect(wrapper.exists()).toBe(true);
+    });
 
-        expect(text).toBe("Loading...");
-      },
-    );
+    then("A loading screen will appear", () => {
+      const loading = wrapper.find(Text);
+      const text = loading.text();
+
+      expect(text).toBe("Loading...");
+    });
   });
 
   test("Scenario #2", ({ given, then }) => {
-    window.fetch = mockFetch(pokemonMock);
-
-    const wrapper: ShallowWrapper<{}, DetailsState> = shallow(
-      <PokemonDetails {...props} />,
-    );
+    let wrapper: ShallowWrapper<{}, DetailsState>;
 
     given("It renders without crashing", () => {
+      window.fetch = mockFetch(pokemonMock);
+
+      wrapper = shallow(<PokemonDetails {...props} />);
+
       expect(wrapper.exists()).toBe(true);
     });
 
     then("after fetching it will render a new Pokemon", async () => {
+      await nextTick();
+
       const pokemonInfoCard = wrapper.find(PokemonInfoCard);
 
       expect(pokemonInfoCard.exists()).toBe(true);

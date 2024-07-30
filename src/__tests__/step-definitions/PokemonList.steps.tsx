@@ -30,13 +30,13 @@ defineFeature(feature, (test) => {
   });
 
   test("Scenario #1", ({ given, then, when }) => {
-    window.fetch = mockFetch(pokemonListResponseMock);
-
-    const wrapper: ShallowWrapper<{}, State> = shallow(
-      <PokemonList {...props} />,
-    );
+    let wrapper: ShallowWrapper<{}, State>;
 
     given("It renders without crashing", () => {
+      window.fetch = mockFetch(pokemonListResponseMock);
+
+      wrapper = shallow(<PokemonList {...props} />);
+
       expect(wrapper.exists()).toBe(true);
     });
 
@@ -73,14 +73,14 @@ defineFeature(feature, (test) => {
   });
 
   test("Scenario #2", ({ when }) => {
+    let wrapper: ShallowWrapper<{}, State>;
+
     when(
       "I scrolldown to the bottom of the list and there is no next url I will see the same value",
       async () => {
         window.fetch = mockFetch(pokemonListResponseMock2);
 
-        const wrapper: ShallowWrapper<{}, State> = shallow(
-          <PokemonList {...props} />,
-        );
+        wrapper = shallow(<PokemonList {...props} />);
 
         const flatlist = wrapper.find(FlatList);
 

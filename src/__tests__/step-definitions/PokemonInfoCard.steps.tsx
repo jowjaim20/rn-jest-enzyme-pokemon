@@ -10,12 +10,12 @@ const feature = loadFeature("./src/__tests__/features/PokemonInfoCard.feature");
 defineFeature(feature, (test) => {
   const props: PokemonInfo = pokemonMock;
 
-  const wrapper: ShallowWrapper<{}, DetailsState> = shallow(
-    <PokemonInfoCard {...props} />,
-  );
-
   test("Render PokemonInfoCard", ({ given, then }) => {
+    let wrapper: ShallowWrapper<{}, DetailsState>;
+
     given("It renders without crashing", () => {
+      wrapper = shallow(<PokemonInfoCard {...props} />);
+
       expect(wrapper.exists()).toBe(true);
     });
 

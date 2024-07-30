@@ -1,7 +1,7 @@
 import { TextInput } from "react-native";
 import { shallow, ShallowWrapper } from "enzyme";
 import { defineFeature, loadFeature } from "jest-cucumber";
-import { pokemonListResponseMock, pokemonListResponseMock1 } from "../../mocks";
+import { pokemonListResponseMock } from "../../mocks";
 import { State } from "../../components/PokemonList";
 import Search, { SearchProps } from "../../components/Search";
 
@@ -16,14 +16,16 @@ defineFeature(feature, (test) => {
     all: pokemonListResponseMock,
   } as unknown as SearchProps;
 
-  const wrapper: ShallowWrapper<{}, State> = shallow(<Search {...props} />);
-
   beforeEach(() => {
     jest.resetModules();
   });
 
   test("Render Search", ({ given, then, when }) => {
+    let wrapper: ShallowWrapper<{}, State>;
+
     given("It renders without crashing", () => {
+      wrapper = shallow(<Search {...props} />);
+
       expect(wrapper.exists()).toBe(true);
     });
 

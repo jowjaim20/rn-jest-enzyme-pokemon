@@ -16,16 +16,16 @@ defineFeature(feature, (test) => {
     url: "test",
   } as unknown as PokemonCardProps;
 
-  const wrapper: ShallowWrapper<{}, State> = shallow(
-    <PokemonCard {...props} />,
-  );
-
   beforeEach(() => {
     jest.resetModules();
   });
 
   test("Render Pokemon Card", ({ given, then, when }) => {
+    let wrapper: ShallowWrapper<{}, State>;
+
     given("It renders without crashing", () => {
+      wrapper = shallow(<PokemonCard {...props} />);
+
       expect(wrapper.exists()).toBe(true);
     });
 

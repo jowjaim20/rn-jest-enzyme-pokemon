@@ -28,8 +28,12 @@ export default class Search extends Component<SearchProps, State> {
     const { searchedPokemons, pokemonName } = this.state;
 
     return (
-      <View style={{ position: "relative", zIndex: 999 }}>
-        <TextInput value={pokemonName} onChangeText={this.onChangeText} />
+      <View style={{ position: "relative", zIndex: 999, marginBottom: 5 }}>
+        <TextInput
+          placeholder="Search Pokemon"
+          value={pokemonName}
+          onChangeText={this.onChangeText}
+        />
         {pokemonName !== "" ? (
           <View
             style={{
